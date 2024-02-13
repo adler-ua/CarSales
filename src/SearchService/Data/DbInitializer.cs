@@ -17,13 +17,12 @@ public class DbInitializer
         .CreateAsync();
 
         var count = await DB.CountAsync<Item>();
-        if(count == 0)
-        {
-            Console.WriteLine("No data in DB, will attempt to seed...");
-            var itemsData = await File.ReadAllTextAsync("Data/auctions.json");
-            var options = new JsonSerializerOptions{ PropertyNameCaseInsensitive = true };
-            var items = JsonSerializer.Deserialize<List<Item>>(itemsData, options);
-            await DB.SaveAsync(items);
-        }
+        
+        // we are in static method, so have to create scope to use DI services
+        using var scope = app.Services.CreateScope();
+        var client = scope.ServiceProvider.GetService<AuctionServiceHttpClient>();
+        var items = await client.GetItemsForSearchDb();
+        Console.WriteLine(items.Count + " returned from Auction service.");
+        if(items.Count>0) await DB.SaveAsync(items);
     }
 }
