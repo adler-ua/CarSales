@@ -17,11 +17,16 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumersFromNamespaceContaining<AuctionCreatedConsumer>();
 
     x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search", false));
-    x.UsingRabbitMq((context,cfg) => {
+    x.UsingRabbitMq((context, cfg) => {
         cfg.ReceiveEndpoint("search-auction-created", endpointFormatter=>{
             // try 5 times with 5 sec between the attempts:
             endpointFormatter.UseMessageRetry(r => r.Interval(5, 5));
             endpointFormatter.ConfigureConsumer<AuctionCreatedConsumer>(context);
+        });
+
+        cfg.ReceiveEndpoint("search-auction-updated", endpointNameFormatter => {
+            endpointNameFormatter.UseMessageRetry(r => r.Interval(5, 5));
+            endpointNameFormatter.ConfigureConsumer<AuctionUpdatedConsumer>(context);
         });
 
         cfg.ConfigureEndpoints(context);
