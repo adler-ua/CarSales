@@ -17,11 +17,13 @@ public class AuctionUpdatedConsumer : IConsumer<AuctionUpdated>
     {
         Console.WriteLine("--> Consuming auction updated: " + context.Message.Id);
         var item = _mapper.Map<Item>(context.Message);
-        await DB.Update<Item>()
+        var result = await DB.Update<Item>()
             .MatchID(context.Message.Id)
             .ModifyOnly(x => new { x.Make, x.Model, x.Color, x.Mileage, x.Year, x.UpdatedAt }, item)
             .ExecuteAsync();
-
-        Console.WriteLine("--! Updated auction: " + context.Message.Id);
+        if(result.IsAcknowledged)
+            Console.WriteLine("--! Updated auction: " + context.Message.Id);
+        else
+            throw new MessageException(typeof(Contracts.AuctionUpdated), "Problem updating object");
     }
 }

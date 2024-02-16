@@ -80,8 +80,7 @@ public class AuctionsController : ControllerBase
         auction.Item.Year = dto.Year ?? auction.Item.Year;
         auction.UpdatedAt = DateTime.UtcNow;
 
-        var updatedAuction = _mapper.Map<AuctionDto>(auction);
-        await _publishEndpoint.Publish(_mapper.Map<Contracts.AuctionUpdated>(updatedAuction));
+        await _publishEndpoint.Publish(_mapper.Map<Contracts.AuctionUpdated>(auction));
 
         var result = await _context.SaveChangesAsync() > 0;
         if(result) return Ok();
@@ -97,9 +96,8 @@ public class AuctionsController : ControllerBase
         // TODO: check seller name
 
         _context.Auctions.Remove(auction);
-        var deletedAuction = _mapper.Map<AuctionDto>(auction);
-        await _publishEndpoint.Publish(_mapper.Map<AuctionDeleted>(deletedAuction));
-        
+        await _publishEndpoint.Publish<AuctionDeleted>(new { Id = auction.Id.ToString() });
+
         var result = await _context.SaveChangesAsync() > 0;
 
         if(!result) return BadRequest("Could not remove auction record from DB");
