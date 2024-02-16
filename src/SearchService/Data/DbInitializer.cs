@@ -22,7 +22,8 @@ public class DbInitializer
         using var scope = app.Services.CreateScope();
         var client = scope.ServiceProvider.GetService<AuctionServiceHttpClient>();
         var items = await client.GetItemsForSearchDb();
-        Console.WriteLine(items.Count + " returned from Auction service.");
+        Console.WriteLine(items.Count + " returned from Auction service:");
+        items.ForEach(item => Console.WriteLine($"{item.ID} updated at {item.UpdatedAt}"));
         if(items.Count>0) await DB.SaveAsync(items);
     }
 }

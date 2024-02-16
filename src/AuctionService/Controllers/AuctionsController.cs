@@ -55,7 +55,8 @@ public class AuctionsController : ControllerBase
         _context.Auctions.Add(auction);
         var newAuction = _mapper.Map<AuctionDto>(auction);
         await _publishEndpoint.Publish(_mapper.Map<Contracts.AuctionCreated>(newAuction));
-        // both things above are going to be saved as a part of a signle transaction:
+        // both things (created auction and outbox message for MassTransit.RabbitMq)
+        // are going to be saved as a part of a signle transaction:
         var result = await _context.SaveChangesAsync() > 0;
         
         if(!result) return BadRequest("Could not save changes to the DB");
@@ -76,6 +77,10 @@ public class AuctionsController : ControllerBase
         auction.Item.Color = dto.Color ?? auction.Item.Color;
         auction.Item.Mileage = dto.Mileage ?? auction.Item.Mileage;
         auction.Item.Year = dto.Year ?? auction.Item.Year;
+        auction.UpdatedAt = DateTime.UtcNow;
+
+        var updatedAuction = _mapper.Map<AuctionDto>(auction);
+        await _publishEndpoint.Publish(_mapper.Map<Contracts.AuctionUpdated>(updatedAuction));
 
         var result = await _context.SaveChangesAsync() > 0;
         if(result) return Ok();
