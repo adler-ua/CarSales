@@ -29,6 +29,11 @@ builder.Services.AddMassTransit(x =>
             endpointNameFormatter.ConfigureConsumer<AuctionUpdatedConsumer>(context);
         });
 
+        cfg.ReceiveEndpoint("search-auction-deleted", endpointNameFormatter => {
+            endpointNameFormatter.UseMessageRetry(r => r.Interval(5, 5));
+            endpointNameFormatter.ConfigureConsumer<AuctionDeletedConsumer>(context);
+        });
+
         cfg.ConfigureEndpoints(context);
     });
 });
@@ -45,7 +50,8 @@ app.Lifetime.ApplicationStarted.Register(async () => {
     try
     {
         await DbInitializer.InitDb(app);
-    }catch(Exception ex)
+    }
+    catch(Exception ex)
     {
         Console.WriteLine(ex);
     }

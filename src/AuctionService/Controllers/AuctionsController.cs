@@ -2,6 +2,7 @@
 using AuctionService.Entities;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Contracts;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -96,6 +97,9 @@ public class AuctionsController : ControllerBase
         // TODO: check seller name
 
         _context.Auctions.Remove(auction);
+        var deletedAuction = _mapper.Map<AuctionDto>(auction);
+        await _publishEndpoint.Publish(_mapper.Map<AuctionDeleted>(deletedAuction));
+        
         var result = await _context.SaveChangesAsync() > 0;
 
         if(!result) return BadRequest("Could not remove auction record from DB");
