@@ -1,4 +1,5 @@
-﻿using Duende.IdentityServer.Models;
+﻿using System.Security.Cryptography;
+using Duende.IdentityServer.Models;
 
 namespace IdentityService;
 
@@ -33,6 +34,18 @@ public static class Config
                 RedirectUris = {"https://www.getpostman.com/oath2/callback/whateveryouwantendpoint-forpostman"},
                 ClientSecrets = new [] { new Secret("NotASecret".Sha256()) },
                 AllowedGrantTypes = { GrantType.ResourceOwnerPassword }
-            }
+            },
+             new Client
+             {
+                ClientId = "nextApp",
+                ClientName = "nextApp",
+                ClientSecrets = {new Secret("secret-secret".Sha256())},
+                AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
+                RequirePkce = false, // would set to true for the native mobile app
+                RedirectUris = {"http://localhost:3000/api/auth/callback/id-server"},
+                AllowOfflineAccess = true,
+                AllowedScopes = {"openid", "profile", "auctionApp"},
+                AccessTokenLifetime = 3600*24*30, // 1 month
+             }
         };
 }
