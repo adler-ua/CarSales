@@ -18,6 +18,13 @@ builder.Services.AddMassTransit(x =>
 
     x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("search", false));
     x.UsingRabbitMq((context, cfg) => {
+
+        cfg.Host(builder.Configuration["RabbitMq:Host"], "/", host=>
+        {
+            host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest" /*default user name*/));
+            host.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest" /*default password*/));
+        });
+        
         cfg.ReceiveEndpoint("search-auction-created", endpointFormatter=>{
             // try 5 times with 5 sec between the attempts:
             endpointFormatter.UseMessageRetry(r => r.Interval(5, 5));
