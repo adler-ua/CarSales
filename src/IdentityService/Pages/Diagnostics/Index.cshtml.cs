@@ -22,6 +22,12 @@ public class Index : PageModel
             localAddresses.Add(HttpContext.Connection.LocalIpAddress.ToString());
         }
 
+        string dockerGatewayAddress = "::ffff:172.19.0.1";
+        if(!localAddresses.Contains(dockerGatewayAddress))
+        {
+            localAddresses.Add(dockerGatewayAddress);
+        }
+        
         if (!localAddresses.Contains(HttpContext.Connection.RemoteIpAddress?.ToString()))
         {
             return NotFound();
