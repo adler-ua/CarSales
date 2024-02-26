@@ -2,7 +2,8 @@ import { useParamsStore } from '@/hooks/useParamsStore';
 import { Button, ButtonGroup } from 'flowbite-react';
 import React from 'react'
 import { AiOutlineClockCircle, AiOutlineSortAscending } from 'react-icons/ai';
-import { BsFillStopCircleFill } from 'react-icons/bs';
+import { BsFillStopCircleFill, BsStopwatch } from 'react-icons/bs';
+import { GiFinishLine, GiFlame } from 'react-icons/gi';
 
 type Props = {
     pageSize: number
@@ -29,42 +30,75 @@ const orderButtons = [
     }
 ]
 
+const filterButtons = [
+    {
+        label: 'Live auctions',
+        icon: GiFlame,
+        value: 'live'
+    },
+    {
+        label: 'Ending < 6 hours',
+        icon: GiFinishLine,
+        value: 'endingSoon'
+    },
+    {
+        label: 'Completed',
+        icon: BsStopwatch,
+        value: 'finished'
+    }
+]
+
 export default function Filters() {
     const pageSize = useParamsStore(state => state.pageSize);
     const setParams = useParamsStore(state => state.setParams);
     const orderBy = useParamsStore(state => state.orderBy);
+    const filterBy = useParamsStore(state => state.filterBy);
 
     return (
-    <div className='flex justify-between items-center mb-4'>
-        <div>
-            <span className='uppercase test-sm text-gray-500 mr-2'>Order by</span>
-            <Button.Group>
-                {orderButtons.map(({label, icon: Icon, value})=>(
-                    <Button key={value}
-                            onClick={()=>setParams({orderBy: value})}
+        <div className='flex justify-between items-center mb-4'>
+            <div>
+                <span className='uppercase test-sm text-gray-500 mr-2'>Filter by</span>
+                <Button.Group>
+                    {filterButtons.map(({ label, icon: Icon, value }) => (
+                        <Button key={value}
+                            onClick={() => setParams({ filterBy: value })}
+                            color={`${filterBy === value ? 'red' : 'gray'}`}>
+                            <Icon className='mr-3 h-4 w-4' />
+                            {label}
+                        </Button>
+                    ))}
+                </Button.Group>
+            </div>
+
+            <div>
+                <span className='uppercase test-sm text-gray-500 mr-2'>Order by</span>
+                <Button.Group>
+                    {orderButtons.map(({ label, icon: Icon, value }) => (
+                        <Button key={value}
+                            onClick={() => setParams({ orderBy: value })}
                             color={`${orderBy === value ? 'red' : 'gray'}`}>
-                        <Icon className='mr-3 h-4 w-4'/>
-                        {label}
-                    </Button>
-                ))}
-            </Button.Group>
-        </div>
-        
-        <div>
-            <span className='uppercase test-sm text-gray-500 mr-2'>Page size</span>
-            <ButtonGroup>
-                {pageSizeButtons.map((value, i/* index we are looping over, and use as a unique key */) => /*immediately return*/
+                            <Icon className='mr-3 h-4 w-4' />
+                            {label}
+                        </Button>
+                    ))}
+                </Button.Group>
+            </div>
+
+            <div>
+                <span className='uppercase test-sm text-gray-500 mr-2'>Page size</span>
+                <ButtonGroup>
+                    {pageSizeButtons.map((value, i/* index we are looping over, and use as a unique key */) => /*immediately return*/
                     (
-                        <Button key={i} 
-                            onClick={()=>setParams({pageSize: value})}
+                        <Button key={i}
+                            onClick={() => setParams({ pageSize: value })}
                             color={`${pageSize === value ? 'red' : 'gray'}`}
                             className='focus:ring-0'
                         >
                             {value}
-                        </Button>                                            
+                        </Button>
                     ))}
-            </ButtonGroup>
-        </div>
-    </div >
-  )
+                </ButtonGroup>
+            </div>
+        </div >
+    )
 }
