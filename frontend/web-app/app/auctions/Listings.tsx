@@ -9,6 +9,7 @@ import Filters from './Filters';
 import { useParamsStore } from '@/hooks/useParamsStore';
 import { shallow } from 'zustand/shallow';
 import qs from 'query-string';
+import EmptyFilter from '../components/EmptyFilter';
 
 export default /*async*/ function Listings() {
   /* using local state: */
@@ -27,31 +28,37 @@ export default /*async*/ function Listings() {
     filterBy: state.filterBy
   }), shallow)
   const setParams = useParamsStore(state => state.setParams);
-  const url = qs.stringifyUrl({url: '', query: params})
+  const url = qs.stringifyUrl({ url: '', query: params })
 
   function setPageNumber(pageNumber: number) {
-    setParams({pageNumber})
+    setParams({ pageNumber })
   }
 
   useEffect(() => {
-    getListingData(url).then(response => { 
+    getListingData(url).then(response => {
       setData(response);
     })
-  }, /* dependencies for the method to be called: */ [url]) /* whenever changes -- useEffect gets called again */
+  }, /* dependencies for the method to be called: */[url]) /* whenever changes -- useEffect gets called again */
 
-  if(!data) return <h3>Loading...</h3>
+  if (!data) return <h3>Loading...</h3>
 
   return (
     <>
-      <Filters/>
-      <div className='grid grid-cols-4 gap-6'>
+      <Filters />
+      {data.totalCount === 0 ? (
+      <EmptyFilter showReset />
+      ) : (
+      <>
+        <div className='grid grid-cols-4 gap-6'>
           {data.results.map(auction => (
-              <AuctionCard auction={auction} key={auction.id} />
+            <AuctionCard auction={auction} key={auction.id} />
           ))}
-      </div>
-      <div className='flex justify-center mt-4'>
-        <AppPagination pageChanged={setPageNumber} currentPage={params.pageNumber} pageCount={data.pageCount}/>
-      </div>
+        </div>
+        <div className='flex justify-center mt-4'>
+          <AppPagination pageChanged={setPageNumber} currentPage={params.pageNumber} pageCount={data.pageCount} />
+        </div>
+      </>
+      )}
     </>
   )
 }
