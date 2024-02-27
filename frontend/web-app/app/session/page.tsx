@@ -1,10 +1,9 @@
-import { getSession } from 'next-auth/react'
 import React from 'react'
 import Heading from '../components/Heading'
-import { getServerSession } from 'next-auth';
+import { getSession } from '../actions/authActions';
 
 export default async function Session() {
-  const session = await getServerSession();
+  const session = await getSession();
   return (
     <div>
       <Heading title='Session Dashboard' />
