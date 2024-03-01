@@ -3,7 +3,8 @@ const nextConfig = {
     images: {
         domains: [
             /* whitelisting of domains to allow load external images */
-            'cdn.pixabay.com'
+            'cdn.pixabay.com',
+            'pixabay.com'
         ]
     }
 };

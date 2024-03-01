@@ -4,10 +4,14 @@ import React, { useEffect } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import Input from '../components/Input';
 import DateInput from '../components/DateInput';
+import { createAuction } from '../actions/auctionActions';
+import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export default function AuctionForm() {
+    const router = useRouter();
     const {control, handleSubmit, setFocus,
-        formState: {isSubmitting, isValid, isDirty, errors}} = useForm({
+        formState: {isSubmitting, isValid}} = useForm({
             mode: 'onTouched'
         });
 
@@ -15,8 +19,15 @@ export default function AuctionForm() {
         setFocus('make');
     }, [setFocus])
 
-    function onSubmit(data: FieldValues) {
-        console.log(data);
+    async function onSubmit(data: FieldValues) {
+        try {
+            const res = await createAuction(data);
+            if(res.error)
+                throw res.error;
+            router.push(`/auctions/details/${res.id}`)
+        } catch(error: any) {
+            toast.error(error.status + ' ' + error.message)
+        }
     }
 
     return (
@@ -49,9 +60,9 @@ export default function AuctionForm() {
 
             <div className='flex justify-between'>
                 <Button outline color='gray'>Cancel</Button>
-                <Button isProcessing={isSubmitting} 
-                        outline color='success' 
-                        disabled={!isValid} 
+                <Button isProcessing={isSubmitting}
+                        disabled={!isValid}
+                        outline color='success'
                         type='submit'>
                     Submit
                 </Button>
