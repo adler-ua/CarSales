@@ -37,6 +37,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters.NameClaimType = "username";
     });
 
+builder.Services.AddHostedService<CheckAuctionFinished>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
