@@ -17,9 +17,9 @@ COPY src/NotificationService/NotificationService.csproj src/NotificationService/
 RUN dotnet restore CarSales.sln
 
 # Copy the application folders over
-COPY src/AuctionService src/AuctionService
+COPY src/NotificationService src/NotificationService
 COPY src/Contracts src/Contracts
-WORKDIR /application/src/AuctionService
+WORKDIR /application/src/NotificationService
 # publish AuctionService application files to out directory:
 RUN dotnet publish -c Release -o /application/src/out
 
@@ -28,4 +28,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /application
 # copy everything from "build" and put it into /application/src/out:
 COPY --from=build /application/src/out .
-ENTRYPOINT [ "dotnet", "AuctionService.dll" ]
+ENTRYPOINT [ "dotnet", "NotificationService.dll" ]
