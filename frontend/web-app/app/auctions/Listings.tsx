@@ -10,6 +10,7 @@ import { useParamsStore } from '@/hooks/useParamsStore';
 import { shallow } from 'zustand/shallow';
 import qs from 'query-string';
 import EmptyFilter from '../components/EmptyFilter';
+import { useAuctionStore } from '@/hooks/useAuctionStore';
 
 export default /*async*/ function Listings() {
   /* using local state: */
@@ -18,8 +19,9 @@ export default /*async*/ function Listings() {
   // const [pageNumber, setPageNumber] = useState(1);
   // const [pageSize, setPageSize] = useState(4);
 
+  const [loading, setLoading] = useState(true);
+
   // using zustand for state management
-  const [data, setData] = useState<PagedResult<Auction>>();
   const params = useParamsStore(state => ({
     pageNumber: state.pageNumber,
     pageSize: state.pageSize,
@@ -28,7 +30,14 @@ export default /*async*/ function Listings() {
     filterBy: state.filterBy,
     seller: state.seller,
     winner: state.winner
-  }), shallow)
+  }), shallow);
+  const data=useAuctionStore(state => ({
+    auctions: state.auctions,
+    totalCount: state.totalCount,
+    pageCount: state.pageCount
+  }), shallow);
+  const setData = useAuctionStore(state => state.setData);
+
   const setParams = useParamsStore(state => state.setParams);
   const url = qs.stringifyUrl({ url: '', query: params })
 
@@ -39,10 +48,11 @@ export default /*async*/ function Listings() {
   useEffect(() => {
     getListingData(url).then(response => {
       setData(response);
+      setLoading(false);
     })
   }, /* dependencies for the method to be called: */[url]) /* whenever changes -- useEffect gets called again */
 
-  if (!data) return <h3>Loading...</h3>
+  if (loading) return <h3>Loading...</h3>
 
   return (
     <>
@@ -52,7 +62,7 @@ export default /*async*/ function Listings() {
       ) : (
       <>
         <div className='grid grid-cols-4 gap-6'>
-          {data.results.map(auction => (
+          {data.auctions.map(auction => (
             <AuctionCard auction={auction} key={auction.id} />
           ))}
         </div>
