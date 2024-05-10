@@ -2,6 +2,8 @@
 // thus cannot be rendered on the server side and returned as html
 'use client'
 
+import { useBidStore } from '@/hooks/useBidStore';
+import { usePathname } from 'next/navigation';
 import React from 'react'
 import Countdown, { zeroPad } from 'react-countdown';
 
@@ -27,7 +29,15 @@ const renderer = ({ days, hours, minutes, seconds, completed }:
   
 
 export default function CountdownTimer({auctionEnd}: Props) {
+  const setOpen = useBidStore(state => state.setOpen);
+  const pathName = usePathname();
+
+  function auctionFinished() {
+    if(pathName.startsWith('/auctions/details')){
+      setOpen(false);
+    }
+  }
   return (
-    <div><Countdown date={auctionEnd} renderer={renderer}/></div>
+    <div><Countdown date={auctionEnd} renderer={renderer} onComplete={auctionFinished}/></div>
   )
 }
