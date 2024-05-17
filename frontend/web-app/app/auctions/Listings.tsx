@@ -50,7 +50,7 @@ export default /*async*/ function Listings() {
       setData(response);
       setLoading(false);
     })
-  }, /* dependencies for the method to be called: */[url]) /* whenever changes -- useEffect gets called again */
+  }, /* dependencies for the method to be called: */[url, setData]) /* whenever changes -- useEffect gets called again */
 
   if (loading) return <h3>Loading...</h3>
 
