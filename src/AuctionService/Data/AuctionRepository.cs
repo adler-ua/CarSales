@@ -1,4 +1,5 @@
-﻿using AuctionService.DTOs;
+﻿using AuctionService.Data;
+using AuctionService.DTOs;
 using AuctionService.Entities;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;

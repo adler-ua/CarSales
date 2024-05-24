@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using AuctionService.Data;
+using Grpc.Core;
 
 namespace AuctionService;
 

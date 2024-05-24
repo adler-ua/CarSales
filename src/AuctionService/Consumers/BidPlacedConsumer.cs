@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using AuctionService.Data;
+using Contracts;
 using MassTransit;
 
 namespace AuctionService;

@@ -1,6 +1,7 @@
 ﻿
 using System.Net;
 using System.Net.Http.Json;
+using AuctionService.Data;
 using AuctionService.DTOs;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,7 +10,8 @@ namespace AuctionService.IntegrationTests;
 // all tests here share the same instance of CustomWebAppFactory
 // hence the same instance of test Postgres, RabbitMq
 // IAsyncLifetime will allow to clean data after each tests
-public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsyncLifetime
+[Collection("Shared collection")]
+public class AuctionControllerTests : IAsyncLifetime
 {
     private readonly CustomWebAppFactory _factory;
     private readonly HttpClient _httpClient;

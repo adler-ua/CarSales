@@ -1,4 +1,5 @@
-﻿using AuctionService.Entities;
+﻿using AuctionService.Data;
+using AuctionService.Entities;
 
 namespace AuctionService.IntegrationTests;
 

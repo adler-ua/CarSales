@@ -2,7 +2,7 @@
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuctionService;
+namespace AuctionService.Data;
 
 public class AuctionDbContext : DbContext
 {
