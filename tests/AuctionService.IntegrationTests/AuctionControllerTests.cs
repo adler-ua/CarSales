@@ -141,8 +141,8 @@ public class AuctionControllerTests : IClassFixture<CustomWebAppFactory>, IAsync
     public async Task UpdateAuction_WithValidUpdateDtoAndInvalidUserUser_ShouldReturn403()
     {
         // arrange (for this test all done in CustomWebAppFactory)
-        var updateAuctionDto = GetAuctionForUpdate();
-        _httpClient.SetFakeJwtBearerToken(AuthHelper.GetBearerForUser("alice"));
+        var updateAuctionDto = new UpdateAuctionDto() { Make = "updated" };
+        _httpClient.SetFakeJwtBearerToken(AuthHelper.GetBearerForUser("alice-not-bob"));
 
         // act
         var response = await _httpClient.PutAsJsonAsync($"api/auctions/{GT_ID}", updateAuctionDto);
