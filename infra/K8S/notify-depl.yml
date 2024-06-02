@@ -19,9 +19,15 @@ spec:
           - name: RabbitMq__Host
             value: rabbit-clusterip
           - name: RabbitMq__Username
-            value: rabbit
+            valueFrom:
+              secretKeyRef:
+                name: notify-secret
+                key: rabbitUserName
           - name: RabbitMq__Password
-            value: rabbitpw
+            valueFrom:
+              secretKeyRef:
+                name: notify-secret
+                key: rabbitPassword
 ---
 apiVersion: v1
 kind: Service
