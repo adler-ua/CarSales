@@ -19,9 +19,15 @@ spec:
           - name: RabbitMq__Host
             value: rabbit-clusterip
           - name: RabbitMq__Username
-            value: rabbit
+            valueFrom:
+              secretKeyRef:
+                name: auction-secret
+                key: rabbitUserName
           - name: RabbitMq__Password
-            value: rabbitpw
+            valueFrom:
+              secretKeyRef:
+                name: auction-secret
+                key: rabbitPassword
           - name: ConnectionStrings__DefaultConnection
             valueFrom:
               secretKeyRef:
