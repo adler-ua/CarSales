@@ -19,11 +19,20 @@ spec:
           - name: RabbitMq__Host
             value: rabbit-clusterip
           - name: RabbitMq__Username
-            value: rabbit
+            valueFrom:
+              secretKeyRef:
+                name: bid-secret
+                key: rabbitUserName
           - name: RabbitMq__Password
-            value: rabbitpw
+            valueFrom:
+              secretKeyRef:
+                name: bid-secret
+                key: rabbitPassword
           - name: ConnectionStrings__MongoDbConnection
-            value: mongodb://root:mongopw@mongo-clusterip
+            valueFrom:
+              secretKeyRef:
+                name: bid-secret
+                key: connString
           - name: IdentityServiceUrl
             value: https://id.runlikehell.xyz
           - name: GrpcAuction
