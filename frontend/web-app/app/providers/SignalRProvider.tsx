@@ -22,7 +22,7 @@ export default function SignalRProvider({children, user}: Props) {
   const addBid = useBidStore(state => state.addBid);
   // workaround while Next.js issue isn't fixed:
   const apiUrl = process.env.NODE_ENV === 'production' 
-        ? 'https://api.carsales.com/notifications'
+        ? 'https://api.runlikehell.xyz/notifications'
         : process.env.NEXT_PUBLIC_NOTIFY_URL;
 
   useEffect(()=>{

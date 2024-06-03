@@ -21,8 +21,13 @@ spec:
               secretKeyRef:
                 name: webapp-secret
                 key: authSecret
+          - name: CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: webapp-secret
+                key: clienthSecret
           - name: NEXTAUTH_URL
-            value: https://app.carsales.com
+            value: https://app.runlikehell.xyz
           - name: API_URL
             value: http://gateway-clusterip/
           - name: ID_URL

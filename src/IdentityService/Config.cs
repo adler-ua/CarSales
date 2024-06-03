@@ -39,7 +39,7 @@ public static class Config
              {
                 ClientId = "nextApp",
                 ClientName = "nextApp",
-                ClientSecrets = {new Secret("secret-secret".Sha256())},
+                ClientSecrets = {new Secret(config["ClientSecret"].Sha256())},
                 AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                 RequirePkce = false, // would set to true for the native mobile app
                 RedirectUris = {config["ClientApp"] + "/api/auth/callback/id-server"},

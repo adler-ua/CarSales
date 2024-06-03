@@ -17,7 +17,7 @@ spec:
         imagePullPolicy: Always
         env:
           - name: ClientApp
-            value: https://app.carsales.com
+            value: https://app.runlikehell.xyz
           - name: IdentityServiceUrl
             value: https://id.runlikehell.xyz
 ---
