@@ -32,6 +32,8 @@ spec:
             value: http://gateway-clusterip/
           - name: ID_URL
             value: https://id.runlikehell.xyz
+          - name: VIRTUAL_HOST
+            value: https://app.runlikehell.xyz
         ports:
         - containerPort: 3000
 ---
