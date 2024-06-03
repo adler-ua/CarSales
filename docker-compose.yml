@@ -83,9 +83,9 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
-      - ClientApp=http://app.carsales.com
+      - ClientApp=http://app.runlikehell.xyz
       - ConnectionStrings__DefaultConnection=Server=postgres:5432;User Id=postgres;Password=postgrespw;Database=identity
-      - VIRTUAL_HOST=id.carsales.com
+      - VIRTUAL_HOST=id.runlikehell.xyz
     depends_on:
       - postgres
     networks:
@@ -99,8 +99,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
-      - ClientApp=https://app.carsales.com
-      - VIRTUAL_HOST=api.carsales.com
+      - ClientApp=https://app.runlikehell.xyz
+      - VIRTUAL_HOST=api.runlikehell.xyz
     networks:
       custom:
   bid-svc:
