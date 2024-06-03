@@ -25,7 +25,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: webapp-secret
-                key: clienthSecret
+                key: clientSecret
           - name: NEXTAUTH_URL
             value: https://app.runlikehell.xyz
           - name: API_URL
