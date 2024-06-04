@@ -25,28 +25,18 @@ public static class Config
     public static IEnumerable<Client> Clients(IConfiguration config) =>
         new Client[]
         {
-            // this is only for development purposes
             new Client
             {
-                ClientId = "postman",
-                ClientName = "Postman",
-                AllowedScopes =  {"openid", "profile", "auctionApp"},
-                RedirectUris = {"https://www.getpostman.com/oath2/callback/whateveryouwantendpoint-forpostman"},
-                ClientSecrets = new [] { new Secret("NotASecret".Sha256()) },
-                AllowedGrantTypes = { GrantType.ResourceOwnerPassword }
-            },
-             new Client
-             {
                 ClientId = "nextApp",
                 ClientName = "nextApp",
                 ClientSecrets = {new Secret(config["ClientSecret"].Sha256())},
                 AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
-                RequirePkce = false, // would set to true for the native mobile app
+                RequirePkce = false,
                 RedirectUris = {config["ClientApp"] + "/api/auth/callback/id-server"},
                 AllowOfflineAccess = true,
                 AllowedScopes = {"openid", "profile", "auctionApp"},
-                AccessTokenLifetime = 3600*24*30, // 1 month
-                AlwaysIncludeUserClaimsInIdToken = true,
-             }
+                AccessTokenLifetime = 3600*24*30,
+                AlwaysIncludeUserClaimsInIdToken = true
+            }
         };
 }
